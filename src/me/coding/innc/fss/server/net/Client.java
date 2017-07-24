@@ -1,4 +1,4 @@
-package me.coding.innc.fss.server.net.client;
+package me.coding.innc.fss.server.net;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

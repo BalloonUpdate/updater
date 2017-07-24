@@ -1,6 +1,7 @@
 package me.coding.innc.fss.server;
 
 import java.awt.AWTException;
+import java.awt.MenuItem;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -9,8 +10,7 @@ import java.util.ArrayList;
 
 import me.coding.innc.fss.server.event.StartedEvent;
 import me.coding.innc.fss.server.event.StoppedEvent;
-import me.coding.innc.fss.server.net.server.Service;
-import me.coding.innc.fss.server.net.server.ServiceStarter;
+import me.coding.innc.fss.server.net.Service;
 import me.coding.innc.fss.server.tools.Config;
 import me.coding.innc.fss.server.tools.Rules;
 import me.coding.innc.fss.server.view.AdvTray;
@@ -25,12 +25,10 @@ public class Main
 	private int port;
 	private int maxrate;
 	private int maxcnt;
-	private Tray tray;
+	private AdvTray tray;
 	
-	private ArrayList<Rule> al = new ArrayList<>();
+	private ArrayList<Rule> rules = new ArrayList<>();
 
-	AdvTray at;
-	
 	public static void main(String[] args) throws IOException, AWTException
 	{
 		Main m = new Main();
@@ -39,22 +37,42 @@ public class Main
 	
 	private void run() throws IOException, AWTException
 	{
-		at = new AdvTray();
-		
-		//init();
+		tray = new AdvTray();
 		
 		service = new Service(port, maxrate, maxcnt, al.toArray(new Rule[0]));
-		service.start();
+		service.start();//启动线程
 		
-		tray.setRunListener((ActionEvent e) ->
+		
+		MenuItem run = new MenuItem("Run");
+		MenuItem stop = new MenuItem("Stop");
+		MenuItem reload = new MenuItem("Reload");
+		MenuItem quit = new MenuItem("Quit");
+		
+		run.addActionListener((ActionEvent e) -> 
 		{
-			if(al.size()==0)
+			if(rules.size()==0)
 			{
-				tray.displayMessage("", "配置文件中无可用规则", MessageType.ERROR);
-				return;
+				tray.displayMessage("严重", "配置文件中无可用规则，无法启动！");
 			}
-			service.startService();
+			else
+			{
+				service.startService();
+			}
+			
 		});
+		stop.addActionListener((ActionEvent e) -> 
+		{
+			
+		});
+		reload.addActionListener((ActionEvent e) -> 
+		{
+			
+		});
+		quit.addActionListener((ActionEvent e) -> 
+		{
+			
+		});
+		
 		
 		tray.setStopListener((ActionEvent e) ->
 		{

@@ -61,16 +61,14 @@ public class AdvTray
 		menu.remove(mi);
 	}
 	
+	
 	public void displayMessage(String summary, String content)//弹出提示消息
 	{
 		tray.displayMessage(summary, content, TrayIcon.MessageType.NONE);
 	}
 	
 	
-	
-	
-	
-	public void showTray()
+	public void showTray()//显示
 	{
 		if(!contains(tray))
 		{
@@ -81,13 +79,29 @@ public class AdvTray
 			catch (AWTException e) {e.printStackTrace();}
 		}
 	}
-	public void hideTray()
+	public void hideTray()//隐藏
 	{
 		if(contains(tray))
 		{
 			sys.remove(tray);
 		}
 	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private boolean contains(TrayIcon trayicon)
 	{
 		TrayIcon[] tis = sys.getTrayIcons();

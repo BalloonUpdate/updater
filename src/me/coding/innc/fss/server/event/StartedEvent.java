@@ -1,18 +1,18 @@
 package me.coding.innc.fss.server.event;
 
+import java.net.InetSocketAddress;
 import java.util.EventObject;
 
 public class StartedEvent extends EventObject
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	public int port;
-	public StartedEvent(Object source, int port)
+	
+	public InetSocketAddress port;
+	
+	public StartedEvent(Object source, InetSocketAddress port2)
 	{
 		super(source);
-		this.port = port;
+		this.port = port2;
 	}
 	
 }
