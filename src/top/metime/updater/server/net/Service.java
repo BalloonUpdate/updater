@@ -196,35 +196,26 @@ public class Service extends Thread
 	
 	public void startService() 
 	{
-		try 
+		if(rules.length==0)//如果没有规则可以用
 		{
-			if(rules.length==0)//如果没有规则可以用
-			{
-				triggeringTipMessageEvent("提示", "没有可用规则，请检查配置文件！");//触发[消息提示]事件
-			}
-			else
-			{
-				try 
-				{
-					tpool = new ThreadPoolExecutor(maxConnet, maxConnet, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<>());//初始化线程池
-					serverSocket = new ServerSocket();//初始化服务端套接字
-				} 
-				catch (IOException e) 
-				{
-					e.printStackTrace();
-					triggeringThrowExceptionEvent(e);//触发[抛出异常]事件
-				}
-				
-				serverSocket.bind(port);//绑定端口
-				triggeringStartedEvent(port);//触发[已启动]事件
-			}
-			
-			
-		} 
-		catch (IOException e) 
-		{
-			triggeringThrowExceptionEvent(e);//触发[抛出异常]事件
+			triggeringTipMessageEvent("提示", "没有可用规则，请检查配置文件！");//触发[消息提示]事件
 		}
+		else
+		{
+			try 
+			{
+				tpool = new ThreadPoolExecutor(maxConnet, maxConnet, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<>());//初始化线程池
+				serverSocket = new ServerSocket(port.getPort());//初始化服务端套接字
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+				triggeringThrowExceptionEvent(e);//触发[抛出异常]事件
+			}
+			
+			triggeringStartedEvent(port);//触发[已启动]事件
+		}
+			
 		
 	}
 	
@@ -243,6 +234,16 @@ public class Service extends Thread
 			e.printStackTrace();
 			triggeringThrowExceptionEvent(e);//触发[抛出异常]事件
 		}
+	}
+	
+	public LinkedList<Client> getClients()
+	{
+		return runningClient;
+	}
+	
+	public int getPort()
+	{
+		return port.getPort();
 	}
 	
 	public void exit()

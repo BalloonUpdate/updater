@@ -40,7 +40,7 @@ public class Main
 	
 	
 	private boolean isrun;
-	private int clientcount; 
+	//private int clientcount; 
 	private void run() throws IOException, AWTException
 	{
 		tray = new AdvTray();
@@ -138,12 +138,13 @@ public class Main
 		
 		service.addClientConnectedListener((ClientConnectedEvent e) ->
 		{
-			tray.setTiptool("当前连接的客户端："+ ++clientcount);
+			//tray.setTiptool("当前连接的客户端："+ ++clientcount);
+			tray.setTiptool("正在监听的端口："+service.getPort()+"\n当前连接的客户端："+service.getClients().size());
 			tray.displayMessage("调试", "IP地址："+e.getAddress().getAddress()+"\n端口："+e.getAddress().getPort()+"\n连接上来了！");
 		});
 		service.addClientDisconnectedListener((ClientDisconnectedEvent e)->
 		{
-			tray.setTiptool("当前连接的客户端："+ --clientcount);
+			tray.setTiptool("正在监听的端口："+service.getPort()+"\n当前连接的客户端："+service.getClients().size());
 			tray.displayMessage("调试", "IP地址："+e.getAddress().getAddress()+"\n端口："+e.getAddress().getPort()+"\n断开了连接！");
 		});
 		service.addStartedListener((StartedEvent e)->
