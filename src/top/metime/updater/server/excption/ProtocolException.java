@@ -1,13 +1,13 @@
 package top.metime.updater.server.excption;
 
-public class ProtoolException extends Exception 
+public class ProtocolException extends Exception 
 {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public ProtoolException()
+	public ProtocolException()
 	{
 		super("协议错误");
 	}

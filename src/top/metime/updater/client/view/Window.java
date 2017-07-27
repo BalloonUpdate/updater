@@ -81,7 +81,7 @@ public class Window
 		this.list = new JList<>();
 		this.jspane = new JScrollPane(this.list);
 	
-		this.info = new JLabel("hahaha");
+		this.info = new JLabel(".");
 	
 		this.window.setTitle("OS: " + System.getProperty("os.name"));
 		this.window.setUndecorated(false);

@@ -45,7 +45,6 @@ public class Main
 	{
 		tray = new AdvTray();
 		tray.setImage(ImageData.RED);
-		tray.setTiptool("当前连接的客户端：0");
 		
 		service = new Service();
 		service.init();
@@ -152,12 +151,14 @@ public class Main
 			tray.setImage(ImageData.GREEN);
 			isrun=true;
 			tray.displayMessage("信息", "现在已始开启监听"+e.port.getPort()+"！");
+			tray.setTiptool("当前连接的客户端：0");
 		});
 		service.addStoppedListener((StoppedEvent e)->
 		{
 			tray.setImage(ImageData.RED);
 			isrun=false;
 			tray.displayMessage("重要", "现在已关闭\n原因："+e.getReson()+"！");
+			tray.setTiptool("");
 		});
 		service.addThrowExceptionListener((ThrowExceptionEvent e)->
 		{

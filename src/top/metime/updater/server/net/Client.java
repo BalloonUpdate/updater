@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import top.metime.updater.server.event.ClientDisconnectedEvent;
 import top.metime.updater.server.event.ClientDisconnectedListener;
-import top.metime.updater.server.excption.ProtoolException;
+import top.metime.updater.server.excption.ProtocolException;
 import top.metime.updater.share.description.Rule;;
 
 public class Client implements Runnable
@@ -54,13 +54,14 @@ public class Client implements Runnable
 		try 
 		{
 			RACK();//验证身份
+			ACK();//验证身份
 			netOut.writeInt(crs.length);//写出规则数量
 			for(Rule per : crs)
 			{
 				sendRule(per);
 			}
 		}
-		catch (IOException | ProtoolException e){e.printStackTrace();}
+		catch (IOException | ProtocolException e){e.printStackTrace();}
 		finally
 		{
 			try 
@@ -74,7 +75,7 @@ public class Client implements Runnable
 		ClientDisconnectedListener.onClientDisconnected(new ClientDisconnectedEvent(this, new InetSocketAddress(socket.getInetAddress().getHostAddress(), socket.getPort())));
 	}
 	
-	private void sendRule(Rule rule) throws IOException, ProtoolException
+	private void sendRule(Rule rule) throws IOException, ProtocolException
 	{
 		HashMap<String, File> dict = rule.getDictionary();
 		write(rule.getRemoteClientPath().getBytes());  //发送远程客户端用的路径
@@ -142,7 +143,7 @@ public class Client implements Runnable
 		return netIn.readBoolean();
 	}
 	
-	private boolean RACK() throws IOException, ProtoolException//接收一个ACK
+	private boolean RACK() throws IOException, ProtocolException//接收一个ACK
 	{
 		byte[] inres = new byte[ACK.length];
 		netIn.read(inres);
@@ -153,8 +154,12 @@ public class Client implements Runnable
 		}
 		else
 		{
-			throw new ProtoolException();
+			throw new ProtocolException();
 		}
+	}
+	private void ACK() throws IOException
+	{
+		this.netOut.write(ACK);
 	}
 	
 	

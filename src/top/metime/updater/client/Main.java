@@ -60,9 +60,6 @@ public class Main
 				input.close();
 			}
 			
-			
-			
-	
 			MainNetter net = new MainNetter(host, port, w);
 			net.start();
 			w.setbstr("完成！");

@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 import top.metime.updater.client.description.LocalFileDescription;
 import top.metime.updater.client.tools.DeleteFolder;
 import top.metime.updater.client.view.Window;
+import top.metime.updater.server.excption.ProtocolException;
 import top.metime.updater.server.tools.MD5;
 import top.metime.updater.share.description.Folder;
 import top.metime.updater.share.description.Storage;
@@ -77,12 +79,12 @@ public class MainNetter
 		int a = 0;
 		for (LocalFileDescription per : this.dll)
 		{
-			this.netOut.writeBoolean(true);
-			netToFile(per.file, per.fd.getMD5(), per.fd.getLength());
+			netOut.writeBoolean(true);
 			a++;
 			w.setTitle("当前进度 "+(a+"/" + dll.size()));
+			netToFile(per.file, per.fd.getMD5(), per.fd.getLength());
 			System.out.println("    >>>>>>   当前进度"+(a) + "/" + dll.size() + "|" + per.fd.getName()+"   下载完毕！");
-			this.w.removedlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "    Kb     -     MD5:" + per.fd.getMD5());
+			w.removedlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "    Kb     -     MD5:" + per.fd.getMD5());
 		}
 		this.netOut.writeBoolean(false);
 		this.dll.clear();
@@ -90,23 +92,38 @@ public class MainNetter
 
 	public void start() throws UnknownHostException, IOException
 	{
-		this.w.setbstr("正在连接服务器。。。。");
+		this.w.setbstr("正在连接服务器。。。");
 		try
 		{
 			this.socket = new Socket(this.host, this.port);
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
 			this.w.destory();
 			JOptionPane.showMessageDialog(null, "连接失败！", "", 0);
 			Runtime.getRuntime().exit(0);
 		}
-		this.w.setbstr("已连接，获取头信息。。。。");
+		
+		
+		
+		this.w.setbstr("已建立连接，初始化必要信息。。。");
 		this.socket.setSoTimeout(6000);
 		this.netIn = new DataInputStream(this.socket.getInputStream());
 		this.netOut = new DataOutputStream(this.socket.getOutputStream());
 	
-		ACK();
+		ACK();//验证身份
+		try 
+		{
+			RACK();//验证身份
+		} catch (ProtocolException e) 
+		{
+			e.printStackTrace();
+			this.w.destory();
+			JOptionPane.showMessageDialog(null, "请检查是端口是否正确！", "协议错误！", 0);
+			Runtime.getRuntime().exit(0);
+		}
+		
 		this.rulesc = this.netIn.readInt();//获取总规则数
 		System.out.println("握手完毕：规则数：" + this.rulesc);
 	
@@ -120,9 +137,9 @@ public class MainNetter
 			//System.out.println(Structure);
 			Folder droot = new Folder(new JSONObject(Structure));
 			
-			this.w.setbstr("正在对比文件，(当前：" + (c + 1) + "/" + this.rulesc + ")");
+			w.setbstr("正在对比文件，(当前：" + (c + 1) + "/" + this.rulesc + ")");
 			wle(droot, root);
-			this.w.setbstr("正在下载文件，(当前：" + (c + 1) + "/" + this.rulesc + ")");
+			w.setbstr("正在下载文件，(当前：" + (c + 1) + "/" + this.rulesc + ")");
 			download();
 		}
 	
@@ -224,6 +241,20 @@ public class MainNetter
 	private void ACK() throws IOException
 	{
 		this.netOut.write(ACK);
+	}
+	private boolean RACK() throws IOException, ProtocolException//接收一个ACK
+	{
+		byte[] inres = new byte[ACK.length];
+		netIn.read(inres);
+		
+		if(Arrays.equals(inres, ACK))
+		{
+			return true;
+		}
+		else
+		{
+			throw new ProtocolException();
+		}
 	}
 
 	private byte[] read() throws IOException
