@@ -116,11 +116,11 @@ public class MainNetter
 		try 
 		{
 			RACK();//验证身份
-		} catch (ProtocolException e) 
+		} catch (ProtocolException | IOException e) 
 		{
 			e.printStackTrace();
 			this.w.destory();
-			JOptionPane.showMessageDialog(null, "请检查是端口是否正确！", "协议错误！", 0);
+			JOptionPane.showMessageDialog(null, "协议错误，请检查是端口是否正确！", "", 0);
 			Runtime.getRuntime().exit(0);
 		}
 		
