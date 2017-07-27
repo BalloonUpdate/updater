@@ -206,17 +206,15 @@ public class Service extends Thread
 			{
 				tpool = new ThreadPoolExecutor(maxConnet, maxConnet, 3, TimeUnit.SECONDS, new LinkedBlockingQueue<>());//初始化线程池
 				serverSocket = new ServerSocket(port.getPort());//初始化服务端套接字
+				triggeringStartedEvent(port);//触发[已启动]事件
 			} 
 			catch (IOException e) 
 			{
 				e.printStackTrace();
 				triggeringThrowExceptionEvent(e);//触发[抛出异常]事件
+				
 			}
-			
-			triggeringStartedEvent(port);//触发[已启动]事件
 		}
-			
-		
 	}
 	
 	public void stopService()
