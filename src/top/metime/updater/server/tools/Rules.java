@@ -32,9 +32,8 @@ public class Rules
 				file.createNewFile();
 				FileWriter writer = new FileWriter(file);
 				Properties pro = new Properties();
-				pro.put("COMMENT_0", "只要标识符中带有 COMMENT_ 程序就不会读取，可作注释，例如 COMMENT_0 asdfgCOMMENT_ dgghCOMMENT_0fegdgd 都不会被读取");
-				pro.put("COMMENT_1", "规则填写格式为 <服务端本地路径(例子： /home/user/dir/)>__<客户端远程路径(例子： ./.minecraft/mods/)>");
-				pro.put("COMMENT_2", "例子： /home/user/dir/__./.minecraft/mods/");
+				pro.put("COMMENT_0", "规则填写格式为：    注释=服务端本地路径__客户端远程路径");
+				pro.put("COMMENT_1", "例子： /home/user/dir/__./.minecraft/mods/");
 				pro.store(writer, "");
 				writer.close();
 			}

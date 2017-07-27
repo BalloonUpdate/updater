@@ -73,7 +73,7 @@ public class MainNetter
 	{
 		for (LocalFileDescription per : this.dll)
 		{
-			this.w.adddlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "    Kb     -     MD5:" + per.fd.getMD5());
+			this.w.adddlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "Kb     -     MD5:  " + per.fd.getMD5().toUpperCase());
 		}
 
 		int a = 0;
@@ -84,7 +84,7 @@ public class MainNetter
 			w.setTitle("当前进度 "+(a+"/" + dll.size()));
 			netToFile(per.file, per.fd.getMD5(), per.fd.getLength());
 			System.out.println("    >>>>>>   当前进度"+(a) + "/" + dll.size() + "|" + per.fd.getName()+"   下载完毕！");
-			w.removedlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "    Kb     -     MD5:" + per.fd.getMD5());
+			w.removedlist(per.fd.getName() + "     -     " + per.fd.getLength() / 1024L + "Kb     -     MD5:  " + per.fd.getMD5().toUpperCase());
 		}
 		this.netOut.writeBoolean(false);
 		this.dll.clear();
